@@ -1,0 +1,29 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.box {
+  border: 2px solid white;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+}
+.row {
+  display: flex;
+  gap: 16px
+}
+
+.bg-grey {
+  background: darkgray;
+}
+
+.bg-green {
+  background: green;
+}
+
+.bg-yellow {
+  background: goldenrod;
+}
