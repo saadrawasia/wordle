@@ -3,6 +3,9 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .box {
