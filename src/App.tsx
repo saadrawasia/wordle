@@ -49,12 +49,19 @@ function App() {
           return;
         }
         const newSubmittedAttempts = [...submittedAttempts];
+        const wordSplit = JSON.parse(JSON.stringify(word));
         for (let i = 0; i < wordLength; i++) {
           if (word[i] === attempts[currentAttempt][i]) {
+            console.log("yes");
             newSubmittedAttempts[currentAttempt][i] = "same";
-          } else if (word.includes(attempts[currentAttempt][i])) {
+            const index = wordSplit.indexOf(wordSplit[i]);
+            wordSplit.splice(index, 1);
+          } else if (wordSplit.includes(attempts[currentAttempt][i])) {
             newSubmittedAttempts[currentAttempt][i] = "diff";
+            const index = wordSplit.indexOf(attempts[currentAttempt][i]);
+            wordSplit.splice(index, 1);
           } else {
+            console.log("yes3");
             newSubmittedAttempts[currentAttempt][i] = "no-match";
           }
         }
@@ -71,7 +78,6 @@ function App() {
         }
       }
     };
-    console.log(currentAttempt);
 
     document.addEventListener("keyup", handler);
 
