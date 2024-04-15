@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { generateGrid } from "./helpers";
+import clsx from "clsx";
 
 function App() {
   const word = "brave".split("");
@@ -94,17 +95,15 @@ function App() {
             {attempt.map((char, key2) => {
               return (
                 <p
-                  className={`flex size-10 items-center justify-center rounded border-2 border-solid border-white text-sm font-bold uppercase sm:size-14 sm:text-xl ${
-                    submittedAttempts[key][key2] === "same" ? "bg-gray-600" : ""
-                  } ${
-                    submittedAttempts[key][key2] === "diff"
-                      ? "bg-yellow-600"
-                      : ""
-                  } ${
-                    submittedAttempts[key][key2] === "no-match"
-                      ? "bg-green-600"
-                      : ""
-                  }`}
+                  className={clsx(
+                    "flex size-10 items-center justify-center rounded border-2 border-solid border-white text-sm font-bold uppercase sm:size-14 sm:text-xl",
+                    {
+                      "bg-gray-600":
+                        submittedAttempts[key][key2] === "no-match",
+                      "bg-yellow-600": submittedAttempts[key][key2] === "diff",
+                      "bg-green-600": submittedAttempts[key][key2] === "same",
+                    },
+                  )}
                   key={key2}
                 >
                   {char}
