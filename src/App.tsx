@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import { generateGrid } from "./helpers";
 
 function App() {
@@ -7,7 +6,7 @@ function App() {
   const wordLength = word.length;
   const [attempts, setAttempts] = useState(generateGrid(wordLength));
   const [submittedAttempts, setSubmittedAttempts] = useState(
-    generateGrid(wordLength)
+    generateGrid(wordLength),
   );
   const [currentAttempt, setCurrentAttempt] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -88,19 +87,23 @@ function App() {
 
   return (
     <>
-      <h1>Wordle</h1>
+      <h1 className="mb-4 text-5xl font-bold uppercase">Wordle</h1>
       {attempts.map((attempt, key) => {
         return (
-          <div className="row" key={key}>
+          <div className="flex gap-4" key={key}>
             {attempt.map((char, key2) => {
               return (
                 <p
-                  className={`box ${
-                    submittedAttempts[key][key2] === "same" ? "bg-green" : ""
+                  className={`flex size-10 items-center justify-center rounded border-2 border-solid border-white text-sm font-bold uppercase sm:size-14 sm:text-xl ${
+                    submittedAttempts[key][key2] === "same" ? "bg-gray-600" : ""
                   } ${
-                    submittedAttempts[key][key2] === "diff" ? "bg-yellow" : ""
+                    submittedAttempts[key][key2] === "diff"
+                      ? "bg-yellow-600"
+                      : ""
                   } ${
-                    submittedAttempts[key][key2] === "no-match" ? "bg-grey" : ""
+                    submittedAttempts[key][key2] === "no-match"
+                      ? "bg-green-600"
+                      : ""
                   }`}
                   key={key2}
                 >
