@@ -3,6 +3,7 @@ import { generateGrid } from "./helpers";
 import clsx from "clsx";
 import "./App.css";
 import { words } from "./data/data";
+import Keyboard from "./components/keyboard";
 
 function App() {
   const [word, setWord] = useState(() =>
@@ -18,6 +19,7 @@ function App() {
   const [gameFinishedState, setGameFinishedState] = useState<string | null>(
     null,
   );
+  const [charactersUsed, setCharactersUsed] = useState({});
 
   const reset = () => {
     setCurrentIndex(0);
@@ -26,6 +28,7 @@ function App() {
     setSubmittedAttempts(generateGrid(wordLength));
     setGameFinishedState(null);
     setWord(words[Math.floor(Math.random() * words.length)].split(""));
+    setCharactersUsed({});
   };
 
   useEffect(() => {
@@ -58,10 +61,8 @@ function App() {
       }
 
       if (e.key === "Enter") {
-        if (
-          currentIndex !== wordLength ||
-          !words.includes(attempts[currentAttempt].join(""))
-        ) {
+        if (currentIndex !== wordLength) {
+          // || !words.includes(attempts[currentAttempt].join(""))
           document
             .getElementById(`row-${currentAttempt}`)
             ?.classList.add("shake-horizontal");
@@ -74,22 +75,35 @@ function App() {
         }
         const newSubmittedAttempts = [...submittedAttempts];
         const wordSplit = JSON.parse(JSON.stringify(word));
+        const submittedCharacters: Record<string, string> = {};
         for (let i = 0; i < wordLength; i++) {
           if (word[i] === attempts[currentAttempt][i]) {
             newSubmittedAttempts[currentAttempt][i] = "same";
             const index = wordSplit.indexOf(attempts[currentAttempt][i]);
             wordSplit.splice(index, 1);
+            submittedCharacters[attempts[currentAttempt][i] as string] =
+              "correct";
           } else if (wordSplit.includes(attempts[currentAttempt][i])) {
             newSubmittedAttempts[currentAttempt][i] = "diff";
             const index = wordSplit.indexOf(attempts[currentAttempt][i]);
             wordSplit.splice(index, 1);
+
+            submittedCharacters[attempts[currentAttempt][i] as string] =
+              "incorrect";
           } else {
             newSubmittedAttempts[currentAttempt][i] = "no-match";
+
+            submittedCharacters[attempts[currentAttempt][i] as string] =
+              "no-match";
           }
         }
         setSubmittedAttempts(newSubmittedAttempts);
         setCurrentIndex(0);
         setCurrentAttempt(currentAttempt + 1);
+        setCharactersUsed({
+          ...charactersUsed,
+          ...submittedCharacters,
+        });
 
         if (attempts[currentAttempt].join("") === word.join("")) {
           setGameFinishedState("success");
@@ -165,6 +179,8 @@ function App() {
           Restart
         </button>
       )}
+
+      {!gameFinishedState && <Keyboard charactersUsed={charactersUsed} />}
     </>
   );
 }
