@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { generateGrid } from "./helpers";
 import clsx from "clsx";
+import "./App.css";
 
 function App() {
   const word = "brave".split("");
@@ -11,16 +12,24 @@ function App() {
   );
   const [currentAttempt, setCurrentAttempt] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [gameFinishedState, setGameFinishedState] = useState<string | null>(
+    null,
+  );
 
   const reset = () => {
     setCurrentIndex(0);
     setCurrentAttempt(0);
     setAttempts(generateGrid(wordLength));
     setSubmittedAttempts(generateGrid(wordLength));
+    setGameFinishedState(null);
   };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (typeof gameFinishedState === "string") {
+        return;
+      }
+
       if (e.key.match(/^[a-zA-Z]$/)) {
         if (currentIndex >= wordLength) {
           return;
@@ -46,6 +55,14 @@ function App() {
 
       if (e.key === "Enter") {
         if (currentIndex !== wordLength) {
+          document
+            .getElementById(`row-${currentAttempt}`)
+            ?.classList.add("shake-horizontal");
+          setTimeout(() => {
+            document
+              .getElementById(`row-${currentAttempt}`)
+              ?.classList.remove("shake-horizontal");
+          }, 300);
           return;
         }
         const newSubmittedAttempts = [...submittedAttempts];
@@ -68,15 +85,9 @@ function App() {
         setCurrentAttempt(currentAttempt + 1);
 
         if (attempts[currentAttempt].join("") === word.join("")) {
-          setTimeout(() => {
-            alert("success");
-            reset();
-          }, 10);
+          setGameFinishedState("success");
         } else if (currentAttempt === 5) {
-          setTimeout(() => {
-            alert("success");
-            reset();
-          }, 10);
+          setGameFinishedState("fail");
         }
       }
     };
@@ -91,7 +102,7 @@ function App() {
       <h1 className="mb-4 text-5xl font-bold uppercase">Wordle</h1>
       {attempts.map((attempt, key) => {
         return (
-          <div className="flex gap-4" key={key}>
+          <div className="flex gap-4" key={key} id={`row-${key}`}>
             {attempt.map((char, key2) => {
               return (
                 <p
@@ -113,6 +124,40 @@ function App() {
           </div>
         );
       })}
+      {gameFinishedState === "success" && (
+        <h2 className="mb-2 mt-4 text-3xl font-bold uppercase text-green-600">
+          Congratulations!
+        </h2>
+      )}
+      {gameFinishedState === "fail" && (
+        <div className="text-center">
+          <h2 className="mb-2 mt-4 text-3xl font-bold uppercase text-red-600">
+            You Lost!
+          </h2>
+          <p>Correct word was:</p>
+          <div className="flex gap-2">
+            {word.map((char, i) => {
+              return (
+                <p
+                  className="flex size-8 items-center justify-center rounded border-2 border-solid border-white bg-green-600 text-sm font-bold uppercase"
+                  key={i}
+                >
+                  {char}
+                </p>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {gameFinishedState && (
+        <button
+          onClick={reset}
+          className="rounded bg-slate-600 px-4 py-3 text-xl text-white"
+        >
+          Restart
+        </button>
+      )}
     </>
   );
 }
