@@ -61,8 +61,10 @@ function App() {
       }
 
       if (e.key === "Enter") {
-        if (currentIndex !== wordLength) {
-          // || !words.includes(attempts[currentAttempt].join(""))
+        if (
+          currentIndex !== wordLength ||
+          !words.includes(attempts[currentAttempt].join(""))
+        ) {
           document
             .getElementById(`row-${currentAttempt}`)
             ?.classList.add("shake-horizontal");
