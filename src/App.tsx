@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { generateGrid } from "./helpers";
 import clsx from "clsx";
 import "./App.css";
+import { words } from "./data/data";
 
 function App() {
-  const word = "brave".split("");
+  const [word, setWord] = useState(() =>
+    words[Math.floor(Math.random() * words.length)].split(""),
+  );
   const wordLength = word.length;
   const [attempts, setAttempts] = useState(generateGrid(wordLength));
   const [submittedAttempts, setSubmittedAttempts] = useState(
@@ -22,6 +25,7 @@ function App() {
     setAttempts(generateGrid(wordLength));
     setSubmittedAttempts(generateGrid(wordLength));
     setGameFinishedState(null);
+    setWord(words[Math.floor(Math.random() * words.length)].split(""));
   };
 
   useEffect(() => {
@@ -54,7 +58,10 @@ function App() {
       }
 
       if (e.key === "Enter") {
-        if (currentIndex !== wordLength) {
+        if (
+          currentIndex !== wordLength ||
+          !words.includes(attempts[currentAttempt].join(""))
+        ) {
           document
             .getElementById(`row-${currentAttempt}`)
             ?.classList.add("shake-horizontal");
