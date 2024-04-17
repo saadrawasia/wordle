@@ -68,10 +68,20 @@ export default function Keyboard({
       </div>
       <div className="flex  justify-stretch gap-1">
         <button
-          className="flex-[4_1_0%] rounded bg-slate-300 p-2 font-bold text-gray-800 hover:bg-slate-400"
+          className=" flex flex-1 items-center justify-center rounded bg-slate-300 p-2 font-bold text-gray-800 hover:bg-slate-400"
           onClick={() => handleClick("Backspace")}
         >
-          Backspace
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="black"
+              d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 16H7.07L2.4 12l4.66-7H22zm-11.59-2L14 13.41L17.59 17L19 15.59L15.41 12L19 8.41L17.59 7L14 10.59L10.41 7L9 8.41L12.59 12L9 15.59z"
+            />
+          </svg>
         </button>
         {keys.thirdRow.map((key, i) => {
           return (
@@ -96,7 +106,7 @@ export default function Keyboard({
           );
         })}
         <button
-          className="flex-[4_1_0%] rounded bg-slate-300 p-2 font-bold text-gray-800  hover:bg-slate-400"
+          className="flex flex-[2_1_0%]  items-center justify-center rounded bg-slate-300 p-2 font-bold text-gray-800  hover:bg-slate-400"
           onClick={() => handleClick("Enter")}
         >
           Enter
